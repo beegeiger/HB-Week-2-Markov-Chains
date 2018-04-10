@@ -42,16 +42,13 @@ def make_chains(text_string):
     #Split text
     words = text_string.split()
     #Loop through text
-    for num in range(len(words) -3):
+    for num in range(len(words) -2):  #Add pairs (as keys) and values to dictionary
         key = (words[num], words[num + 1])
         value = words[num + 2]
         if chains.get(key) is None:
             chains[key] = [value]
         else:
             chains[key].append(value)
-    #Add pairs (as keys) and values to dictionary
-
-
     # your code goes here
 
     return chains
