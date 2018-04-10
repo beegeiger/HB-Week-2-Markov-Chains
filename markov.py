@@ -11,7 +11,7 @@ def open_and_read_file(file_path):
     """
 
     return open(file_path).read()
-    
+
 
 def make_chains(text_string):
     """Take input text as string; return dictionary of Markov chains.
@@ -39,6 +39,18 @@ def make_chains(text_string):
     """
 
     chains = {}
+    #Split text
+    words = text_string.split()
+    #Loop through text
+    for num in range(len(words) -3):
+        key = (words[num], words[num + 1])
+        value = words[num + 2]
+        if chains.get(key) is None:
+            chains[key] = [value]
+        else:
+            chains[key].append(value)
+    #Add pairs (as keys) and values to dictionary
+
 
     # your code goes here
 
