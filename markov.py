@@ -74,8 +74,37 @@ def make_text(chains):
         else:
             break
 
+    return " ".join(word_text)
+
+
+def make_n_text(chains, n):
+    """Return text from chains."""
+
+    word_text = []
+    # add random key to start
+    random_key = choice(chains.keys())
+    word_text.extend(random_key)
+    # loop through word_text
+    while True:
+
+        #create key of n length
+        key = []
+
+        for word in word_text[-n:]:
+            key.append(word)
+
+        key = tuple(key)
+
+        if chains.get(key):
+            value = chains[key]
+            word_text.append(choice(value))
+
+        else:
+            break
+
 
     return " ".join(word_text)
+
 
 def make_n_chain(text_string, n):
     chains = {}
@@ -83,16 +112,16 @@ def make_n_chain(text_string, n):
     words = text_string.split()
 
     #Loop through text
-    for num in range(len(words) - n):  #Add pairs (as keys) and values to dictionary
+    for num in range(len(words) - n):  # Add pairs (as keys) and values to dictionary
         key = []  # (words[num], words[num + 1])
         value = words[num + n]
 
         #create key of n length
-        for dig in range(num, num + n):
-            key.append(words[dig])
-       
+        for index in range(num, num + n):
+            key.append(words[index])
+
         key = tuple(key)
-        
+
         if chains.get(key) is None:
             chains[key] = [value]
         else:
@@ -102,16 +131,14 @@ def make_n_chain(text_string, n):
     return chains
 
 
-
-
-
-
 input_path = sys.argv[1]
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
-make_n_chain(input_text, 4)
+chains = make_n_chain(input_text, 4)
+
+random_text = make_n_text(chains, 4)
 
 # Get a Markov chain
 #chains = make_chains(input_text)
@@ -119,4 +146,4 @@ make_n_chain(input_text, 4)
 # Produce random text
 #random_text = make_text(chains)
 
-#print random_text
+print random_text
