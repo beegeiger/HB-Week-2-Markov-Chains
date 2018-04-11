@@ -97,6 +97,10 @@ def make_n_text(chains, n):
 
         key = tuple(key)
 
+        # check if key[0] == "God" or key[0] == "Jesus"
+        # if yes, move on and grab 1000 words
+        # else grab new key
+
         # Add new words to text
         if chains.get(key):
             if len(word_text) < 1000:
@@ -112,18 +116,44 @@ def make_n_text(chains, n):
     return " ".join(word_text)
 
 
-def return_n_tweet(markov_text, n = 280):
-    # Find start of sentence "Capital letter"
-    # terminate end of sentence.
-    # n/2
+def return_n_tweet(markov_text, n=280):
+    """
+    """
+    
     index = 0
+    bible_words = ['Jesus', 'God']
+
+    # Find start of sentence "Capital letter"
     while True:
+
+        # split markov text on periods, make list
+        # possible for loop to iterate through sentences
+            # check split list => if "Jesus" in sentence => use this sentence
+            # elif "God" in sentence => use sentence
+            # else grab aanother sentence
         
         if markov_text[index] == ".":
             markov_text = markov_text[index + 2:]
             break
         
         index += 1
+    
+    index = 0
+    
+    while True:
+        
+        if markov_text[index] == "." and index >= (n / 2):
+            markov_text = markov_text[: index + 1]
+            for word in bible_words:
+                if word in markov_text:
+                    break
+                else:
+                    markov_text = markov_text[index:]
+        
+        index += 1
+    # terminate end of sentence.
+    # n/2
+
     print markov_text
 
 def make_n_chain(text_string, n):
@@ -187,4 +217,4 @@ random_text = make_n_text(chains, n)
 
 return_n_tweet(random_text)
 
-print random_text
+#print random_text
