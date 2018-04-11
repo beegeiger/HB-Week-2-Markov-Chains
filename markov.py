@@ -61,11 +61,11 @@ def make_text(chains):
     """Return text from chains."""
 
     word_text = []
-    
+
     # add random key to start
     random_key = choice(chains.keys())
     word_text.extend(random_key)
-    
+
     # loop through word_text
     while True:
         key = (word_text[-2], word_text[-1])
@@ -79,13 +79,23 @@ def make_text(chains):
     return " ".join(word_text)
 
 
-def make_n_text(chains, n):
+def make_n_text(chains, n=280):
     """Return text from chains."""
-    loop = 0
+
     word_text = []
-    # add random key to start
-    random_key = choice(chains.keys())
-    word_text.extend(random_key)
+
+    # select random key to start
+    while True:
+        random_key = choice(chains.keys())
+        if random_key[0][0].isupper():
+            break
+
+    # check if key[0] == "God" or key[0] == "Jesus"
+    # if yes, move on and grab 1000 words
+    # else grab new key
+
+    word_text.extend(random_key)  # add key to list
+
     # loop through word_text
     while True:
 
@@ -97,18 +107,14 @@ def make_n_text(chains, n):
 
         key = tuple(key)
 
-        # check if key[0] == "God" or key[0] == "Jesus"
-        # if yes, move on and grab 1000 words
-        # else grab new key
-
         # Add new words to text
-        if chains.get(key):
-            if len(word_text) < 1000:
+        if chains.get(key):  # does this key exist?
+            if len(word_text) < 3000:
                 value = chains[key]  # look up value of key
                 random_value = choice(value)
-                word_text.append(random_value) # pick random word and append to text
+                word_text.append(random_value)  # pick random word and append to text
             else:
-                break        #break
+                break
 
         else:
             break
@@ -117,44 +123,63 @@ def make_n_text(chains, n):
 
 
 def return_n_tweet(markov_text, n=280):
+    """ Returns tweet of n length
     """
-    """
-    
-    index = 0
+
     bible_words = ['Jesus', 'God']
 
-    # Find start of sentence "Capital letter"
-    while True:
+    # split markov text on periods, make list
+    markov_sentences = markov_text.split('.')
+    # possible for loop to iterate through sentences
+    for sentence in markov_sentences:
+    # check split list => if "Jesus" in sentence => use this sentence
+        for word in bible_words:
+            if word in sentence:
+                sentence_index = markov_sentences.index(sentence)
+                break
+    tweet = ''
+    index_to_tweet = sentence_index
 
-        # split markov text on periods, make list
-        # possible for loop to iterate through sentences
-            # check split list => if "Jesus" in sentence => use this sentence
-            # elif "God" in sentence => use sentence
-            # else grab aanother sentence
+    while len(tweet) <= n:
+        tweet = tweet + markov_sentences[index_to_tweet] + "."
+        index_to_tweet += 1
+
+    return tweet
+
+    # elif "God" in sentence => use sentence
+    # else grab aanother sentence
+
+    # while True:
+
+    #     # split markov text on periods, make list
+    #     # possible for loop to iterate through sentences
+    #         # check split list => if "Jesus" in sentence => use this sentence
+    #         # elif "God" in sentence => use sentence
+    #         # else grab aanother sentence
         
-        if markov_text[index] == ".":
-            markov_text = markov_text[index + 2:]
-            break
+    #     if markov_text[index] == ".":
+    #         markov_text = markov_text[index + 2:]
+    #         break
         
-        index += 1
+    #     index += 1
     
-    index = 0
+    # index = 0
     
-    while True:
+    # while True:
         
-        if markov_text[index] == "." and index >= (n / 2):
-            markov_text = markov_text[: index + 1]
-            for word in bible_words:
-                if word in markov_text:
-                    break
-                else:
-                    markov_text = markov_text[index:]
+    #     if markov_text[index] == "." and index >= (n / 2):
+    #         markov_text = markov_text[: index + 1]
+    #         for word in bible_words:
+    #             if word in markov_text:
+    #                 break
+    #             else:
+    #                 markov_text = markov_text[index:]
         
-        index += 1
+    #     index += 1
     # terminate end of sentence.
     # n/2
 
-    print markov_text
+    return markov_text
 
 def make_n_chain(text_string, n):
     chains = {}
@@ -215,6 +240,6 @@ chains = make_n_chain(input_text, n)
 #random_text = make_text(chains)
 random_text = make_n_text(chains, n)
 
-return_n_tweet(random_text)
+print return_n_tweet(random_text)
 
 #print random_text
