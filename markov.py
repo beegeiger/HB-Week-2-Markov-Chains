@@ -81,7 +81,7 @@ def make_text(chains):
 
 def make_n_text(chains, n):
     """Return text from chains."""
-
+    loop = 0
     word_text = []
     # add random key to start
     random_key = choice(chains.keys())
@@ -99,17 +99,32 @@ def make_n_text(chains, n):
 
         # Add new words to text
         if chains.get(key):
-            value = chains[key]  # look up value of key
-            random_value = choice(value)
-            word_text.append(random_value) # pick random word and append to text
-            if '.' in random_value:
-                break
+            if len(word_text) < 1000:
+                value = chains[key]  # look up value of key
+                random_value = choice(value)
+                word_text.append(random_value) # pick random word and append to text
+            else:
+                break        #break
 
         else:
             break
 
     return " ".join(word_text)
 
+
+def return_n_tweet(markov_text, n = 280):
+    # Find start of sentence "Capital letter"
+    # terminate end of sentence.
+    # n/2
+    index = 0
+    while True:
+        
+        if markov_text[index] == ".":
+            markov_text = markov_text[index + 2:]
+            break
+        
+        index += 1
+    print markov_text
 
 def make_n_chain(text_string, n):
     chains = {}
@@ -169,5 +184,7 @@ chains = make_n_chain(input_text, n)
 # Produce random text
 #random_text = make_text(chains)
 random_text = make_n_text(chains, n)
+
+return_n_tweet(random_text)
 
 print random_text
